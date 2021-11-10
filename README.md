@@ -1,17 +1,19 @@
-# go-clang/v5.0 [![GoDoc](https://godoc.org/github.com/go-clang/v5.0?status.png)](https://godoc.org/github.com/go-clang/v5.0) [![Build Status](https://travis-ci.org/go-clang/v5.0.svg?branch=master)](https://travis-ci.org/go-clang/v5.0)
+# go-clang/clang-v5
 
-Native Go bindings for Clang's C API.
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/go-clang/clang-v5)](https://pkg.go.dev/github.com/go-clang/clang-v5)
+
+Native Go bindings for Clang v5 C API.
 
 ## Install/Update
 
 ```bash
 CGO_LDFLAGS="-L`llvm-config --libdir`" \
-  go get -u github.com/go-clang/v5.0/...
+  go install github.com/go-clang/clang-v5/...
 ```
 
 ## Usage
 
-An example on how to use the AST visitor of the Clang API can be found in [/cmd/go-clang-dump/main.go](/cmd/go-clang-dump/main.go)
+An example on how to use the AST visitor of the Clang API can be found in [cmd/go-clang-dump/main.go](cmd/go-clang-dump/main.go)
 
 ## I need bindings for a different Clang version
 

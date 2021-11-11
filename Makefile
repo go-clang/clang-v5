@@ -1,25 +1,15 @@
-.PHONY: all install install-dependencies install-tools test test-full test-verbose
-
-export ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+.PHONY: all test docker/test
 
 export CC := clang
 export CXX := clang++
 
-ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-$(eval $(ARGS):;@:) # turn arguments into do-nothing targets
-export ARGS
+LLVM_LIBDIR?=$(shell llvm-config --libdir)
+LLVM_VERSION?=5
 
-all: install test
-
-install:
-	CGO_LDFLAGS="-L`llvm-config --libdir`" go install ./...
-install-dependencies:
-	go get -u github.com/stretchr/testify/...
-install-tools:
+all: test
 
 test:
-	CGO_LDFLAGS="-L`llvm-config --libdir`" go test -timeout 60s ./...
-test-full:
-	$(ROOT_DIR)/scripts/test-full.sh
-test-verbose:
-	CGO_LDFLAGS="-L`llvm-config --libdir`" go test -timeout 60s -v ./...
+	CGO_LDFLAGS="-L${LLVM_LIBDIR} -Wl,-rpath,${LLVM_LIBDIR}" go test -v -race ./...
+
+docker/test:
+	docker container run --rm -it --mount type=bind,src=$(CURDIR),dst=/go/src/github.com/go-clang/clang-v5 -w /go/src/github.com/go-clang/clang-v5 goclang/base:${LLVM_VERSION} make test
